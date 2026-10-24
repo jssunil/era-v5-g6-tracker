@@ -1,6 +1,6 @@
 # ⚡ ERA V5 Capstone — Team G6 (Performance & Kernels) Public Tracker
 
-> **Snapshot Date:** `2026-10-24` · **Commit:** `8c232a4` · **Team Folder:** `teams/06-performance/` · **Team Lead:** Vaibhav Lohar
+> **Snapshot Date:** `2026-10-24` · **Commit:** `d0c5010` · **Team Folder:** `teams/06-performance/` · **Team Lead:** Vaibhav Lohar
 >
 > **How to Update:** Edit `tracker/*.json` (or submit a PR) and run `python scripts/build.py` to regenerate both `TRACKER.md` and `dist/index.html`.
 
@@ -85,6 +85,19 @@
 | `G6-W3-01` | **Week 3 (Gate 3): Dry Run 1 Full-Width Profile, MoE Dispatch/All-to-All & Fused Kernels**<br><sub>Gate: Full-width profile of Dry Run 1 (torch.profiler, Nsight); profile MoE dispatch, all-to-all, checkpoint save; test fused kernels against reference.</sub> | All Core Members + W3 Rotation | `2026-11-15` → `2026-11-21` | ⚪ Planned | _Planned_ |
 | `G6-W4-01` | **Kernel Freeze (23 Nov) & Dry Run 2 Speed Comparison**<br><sub>Gate: All production kernels frozen by 23 Nov; Dry Run 2 speed & MFU verified on 24–26 Nov.</sub> | Team G6 Core | `2026-11-22` → `2026-11-26` | ⚪ Planned | _Planned_ |
 | `G6-W4-02` | **Week 4 (Gate 4): Launch Commit Correctness Check & speed_backlog.md**<br><sub>Gate: Full correctness suite passes on launch commit; speed check signed off; speed_backlog.md published before main training run starts on 28 Nov.</sub> | Team G6 Core | `2026-11-26` → `2026-11-28` | ⚪ Planned | _Planned_ |
+
+---
+
+## 📚 Prerequisite Reading, Papers & Study Plan (Mapped to Tasks)
+
+| Code | Topic & Required Reading / Papers | Owner | Target Date | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| `READ-DIAG` | **Data Cleaning, FineWeb/Dolma Filters & Diagnosis Taxonomy (For DIAG-150 & DIAG-500)**<br><sub>Read diagnosis/DISEASES.md (codes A1–G2), Session 4 notes (FineWeb/Gopher/C4 filtering, MinHash LSH, regex PII/boilerplate fixes, <=1% gold drop harm test), and FineWeb (arXiv:2406.17557) & Dolma (arXiv:2402.00159).</sub> | All Core Members | `2026-10-26` | 🔵 In Progress |
+| `READ-MOE` | **Sparse MoE Routing, Token Permutation & Grouped GEMM Kernels (For G6-W1-06 test_moe.py)**<br><sub>Read Session 14 notes (384 routed + 1 shared expert, top-6 routing, aux-free bias), DeepSeekMoE (arXiv:2401.06066 §2), DeepSeek-V3 (arXiv:2412.19437 §3), MegaBlocks (arXiv:2211.15841), ScatterMoE (arXiv:2403.08245), and PMPP Ch. 11 (Prefix Sum/Scan for token offset tables).</sub> | Sunil Jakkaraju (@jssunil) | `2026-10-28` | 🔵 In Progress |
+| `READ-ATTN` | **FlashAttention 1–3, Hybrid SWA + Full GQA & QK-Norm Fusion (For G6-W1-05 test_attention.py)**<br><sub>Read Session 16 First Principles §2 (3:1 SWA W=512 + Full Attention, GQA 48Q/4KV, QK-norm), FlashAttention-1/2/3 (arXiv:2205.14135, 2307.08691, 2407.08608), and Liger Kernel (arXiv:2410.10989 RMSNorm/RoPE fusion).</sub> | Shashank | `2026-10-28` | ⚪ Planned |
+| `READ-REV` | **Reversible Residual Networks, Custom Autograd & Bit-Determinism (For G6-W1-07 test_reversible.py)**<br><sub>Read Session 16 First Principles §1 (Reversible equations Y1=X1+F(X2), Y2=X2+G(Y1), exact reconstruction X2=Y2-G(Y1), X1=Y1-F(X2)), Session 16 System Walkthrough §1, RevNet (arXiv:1707.04585), and PyTorch Determinism + PMPP Ch. 10 (Deterministic Reductions).</sub> | Shiva | `2026-10-28` | ⚪ Planned |
+| `READ-PERF` | **CUDA Events, Roofline Model, Nsight Profiling & Sparse MoE MFU (For G6-W1-01/02/08/09)**<br><sub>Read Session 10 notes (MFU & FP8/BF16 precision), Session 16 Scaling Laws & FLOP Accounting (6*N_active + attention FLOPs), OLMo 2 (arXiv:2501.00656 §3 telemetry), Nsight Systems/Compute Roofline guide, and PMPP Ch. 4–6 (Memory Hierarchy & Coalescing).</sub> | Vashishth & Vaibhav Lohar | `2026-10-28` | ⚪ Planned |
+| `READ-KE2` | **Factorized Token / Kernelized Embedding (KE2) & Cut Cross-Entropy (For G6-W1-04 test_ke.py)**<br><sub>Read Session 16 System Walkthrough (Embedding/LM Head parameterization), Cut Cross-Entropy (arXiv:2411.09009), and Triton Tutorials 01–05 (vector-add, fused-softmax, matmul, layer-norm).</sub> | Adinath | `2026-10-28` | ⚪ Planned |
 
 ---
 

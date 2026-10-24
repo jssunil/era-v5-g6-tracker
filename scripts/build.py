@@ -188,6 +188,22 @@ def render_markdown(data, sha, snapshot, repo_url):
                 f"| `{m['code']}` | **{m['title']}**<br><sub>Gate: {m['gate']}</sub> | {m['owner']} | `{m['start']}` → `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} | {ev} |"
             )
 
+    learn_ms = [m for m in ms if m["lane"] == "Learning"]
+    if learn_ms:
+        lines.extend([
+            "",
+            "---",
+            "",
+            "## 📚 Prerequisite Reading, Papers & Study Plan (Mapped to Tasks)",
+            "",
+            "| Code | Topic & Required Reading / Papers | Owner | Target Date | Status |",
+            "| :--- | :--- | :--- | :--- | :--- |",
+        ])
+        for m in learn_ms:
+            lines.append(
+                f"| `{m['code']}` | **{m['title']}**<br><sub>{m['gate']}</sub> | {m['owner']} | `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} |"
+            )
+
     lines.extend([
         "",
         "---",

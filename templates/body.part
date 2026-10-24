@@ -121,6 +121,12 @@ const DATA=__DATA__;
   const w24=ms.filter(m=>m.lane==="Week 2"||m.lane==="Week 3"||m.lane==="Week 4");
   sections.push(sec("Weeks 2–4 Capstone Roadmap (Gates 2, 3 & 4)","Diwali break is 5–11 Nov (no work). Gate 2: 14 Nov · Gate 3: 21 Nov · Kernel Freeze: 23 Nov · Dry Run 2: 24–26 Nov · Gate 4 & Main Run Launch: 28 Nov.",table(w24,"No Week 2–4 milestones.")));
 
+  // Section 3b: Prerequisite Reading & Study Plan (Learning lane)
+  const learn=ms.filter(m=>m.lane==="Learning");
+  if(learn.length){
+    sections.push(sec("Prerequisite Reading, Papers & Study Plan (By Task)","Targeted ERA V5 session notes, arXiv papers, PMPP chapters, and Triton tutorials mapped directly to each member's Week 1–2 deliverable.",table(learn,"No learning tasks.")));
+  }
+
   // Section 4: Timeline SVG Gantt
   const t0=parse("2026-10-24"),t1=parse("2026-11-29"),W=1060,L=260,R=16,rowH=24,top=34,H=top+ms.length*rowH+8;
   const span=(t1-t0)/86400000,x=d=>L+((d-t0)/86400000)/span*(W-L-R);

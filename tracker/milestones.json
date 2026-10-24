@@ -232,5 +232,83 @@
     "status": "planned",
     "hard": true,
     "evidence": ""
+  },
+  {
+    "id": "L01",
+    "code": "READ-DIAG",
+    "title": "Data Cleaning, FineWeb/Dolma Filters & Diagnosis Taxonomy (For DIAG-150 & DIAG-500)",
+    "lane": "Learning",
+    "owner": "All Core Members",
+    "start": "2026-10-24",
+    "due": "2026-10-26",
+    "gate": "Read diagnosis/DISEASES.md (codes A1–G2), Session 4 notes (FineWeb/Gopher/C4 filtering, MinHash LSH, regex PII/boilerplate fixes, <=1% gold drop harm test), and FineWeb (arXiv:2406.17557) & Dolma (arXiv:2402.00159).",
+    "status": "active",
+    "hard": false,
+    "evidence": ""
+  },
+  {
+    "id": "L02",
+    "code": "READ-MOE",
+    "title": "Sparse MoE Routing, Token Permutation & Grouped GEMM Kernels (For G6-W1-06 test_moe.py)",
+    "lane": "Learning",
+    "owner": "Sunil Jakkaraju (@jssunil)",
+    "start": "2026-10-24",
+    "due": "2026-10-28",
+    "gate": "Read Session 14 notes (384 routed + 1 shared expert, top-6 routing, aux-free bias), DeepSeekMoE (arXiv:2401.06066 §2), DeepSeek-V3 (arXiv:2412.19437 §3), MegaBlocks (arXiv:2211.15841), ScatterMoE (arXiv:2403.08245), and PMPP Ch. 11 (Prefix Sum/Scan for token offset tables).",
+    "status": "active",
+    "hard": false,
+    "evidence": ""
+  },
+  {
+    "id": "L03",
+    "code": "READ-ATTN",
+    "title": "FlashAttention 1–3, Hybrid SWA + Full GQA & QK-Norm Fusion (For G6-W1-05 test_attention.py)",
+    "lane": "Learning",
+    "owner": "Shashank",
+    "start": "2026-10-24",
+    "due": "2026-10-28",
+    "gate": "Read Session 16 First Principles §2 (3:1 SWA W=512 + Full Attention, GQA 48Q/4KV, QK-norm), FlashAttention-1/2/3 (arXiv:2205.14135, 2307.08691, 2407.08608), and Liger Kernel (arXiv:2410.10989 RMSNorm/RoPE fusion).",
+    "status": "planned",
+    "hard": false,
+    "evidence": ""
+  },
+  {
+    "id": "L04",
+    "code": "READ-REV",
+    "title": "Reversible Residual Networks, Custom Autograd & Bit-Determinism (For G6-W1-07 test_reversible.py)",
+    "lane": "Learning",
+    "owner": "Shiva",
+    "start": "2026-10-24",
+    "due": "2026-10-28",
+    "gate": "Read Session 16 First Principles §1 (Reversible equations Y1=X1+F(X2), Y2=X2+G(Y1), exact reconstruction X2=Y2-G(Y1), X1=Y1-F(X2)), Session 16 System Walkthrough §1, RevNet (arXiv:1707.04585), and PyTorch Determinism + PMPP Ch. 10 (Deterministic Reductions).",
+    "status": "planned",
+    "hard": false,
+    "evidence": ""
+  },
+  {
+    "id": "L05",
+    "code": "READ-PERF",
+    "title": "CUDA Events, Roofline Model, Nsight Profiling & Sparse MoE MFU (For G6-W1-01/02/08/09)",
+    "lane": "Learning",
+    "owner": "Vashishth & Vaibhav Lohar",
+    "start": "2026-10-24",
+    "due": "2026-10-28",
+    "gate": "Read Session 10 notes (MFU & FP8/BF16 precision), Session 16 Scaling Laws & FLOP Accounting (6*N_active + attention FLOPs), OLMo 2 (arXiv:2501.00656 §3 telemetry), Nsight Systems/Compute Roofline guide, and PMPP Ch. 4–6 (Memory Hierarchy & Coalescing).",
+    "status": "planned",
+    "hard": false,
+    "evidence": ""
+  },
+  {
+    "id": "L06",
+    "code": "READ-KE2",
+    "title": "Factorized Token / Kernelized Embedding (KE2) & Cut Cross-Entropy (For G6-W1-04 test_ke.py)",
+    "lane": "Learning",
+    "owner": "Adinath",
+    "start": "2026-10-24",
+    "due": "2026-10-28",
+    "gate": "Read Session 16 System Walkthrough (Embedding/LM Head parameterization), Cut Cross-Entropy (arXiv:2411.09009), and Triton Tutorials 01–05 (vector-add, fused-softmax, matmul, layer-norm).",
+    "status": "planned",
+    "hard": false,
+    "evidence": ""
   }
 ]
