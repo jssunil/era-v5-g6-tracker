@@ -1,6 +1,6 @@
 # ⚡ ERA V5 Capstone — Team G6 (Performance & Kernels) Public Tracker
 
-> **Snapshot Date:** `2026-10-24` · **Commit:** `d0c5010` · **Team Folder:** `teams/06-performance/` · **Team Lead:** Vaibhav Lohar
+> **Snapshot Date:** `2026-10-24` · **Commit:** `a988b4e` · **Team Folder:** `teams/06-performance/` · **Team Lead:** Vaibhav Lohar
 >
 > **How to Update:** Edit `tracker/*.json` (or submit a PR) and run `python scripts/build.py` to regenerate both `TRACKER.md` and `dist/index.html`.
 
