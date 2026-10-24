@@ -1,0 +1,34 @@
+[
+  {
+    "id": "DEC01",
+    "code": "D01",
+    "date": "2026-10-24",
+    "decision": "Use torch.cuda.Event(enable_timing=True) in perfkit/timer.py with synchronization only at step/report boundaries, and a zero-overhead no-op context manager when enabled=False.",
+    "reason": "Avoids per-layer CPU-GPU sync stalls during training while guaranteeing zero overhead when timing is toggled off (required by G6_Instructions.md).",
+    "state": "decided"
+  },
+  {
+    "id": "DEC02",
+    "code": "D02",
+    "date": "2026-10-24",
+    "decision": "Enforce the 3-part correctness contract in correctness/framework.py: (1) forward & backward grad parity, (2) bit-deterministic rerun equality, and (3) automatic failure when the fast output is multiplied by 1.01.",
+    "reason": "Directly codifies the Week 1 Gate 1 check ('A broken function fails: lead multiplies one fast output by 1.01, and the test fails').",
+    "state": "decided"
+  },
+  {
+    "id": "DEC03",
+    "code": "D03",
+    "date": "2026-10-24",
+    "decision": "Standardize baseline repeatability in perfkit/bench.py using warmup steps, locked clocks/seeds where available, and an automated <=5% run-to-run spread assertion across two consecutive baseline runs.",
+    "reason": "Required by Week 1 Gate 1 check #3 ('Two baseline runs agree within 5% for each part').",
+    "state": "decided"
+  },
+  {
+    "id": "DEC04",
+    "code": "D04",
+    "date": "2026-10-24",
+    "decision": "Count only non-embedding active parameters (approx 2.68B active of 15B total) + attention FLOPs in the MFU calculation handed off to Team G8.",
+    "reason": "For sparse MoE (top-6 of 384 routed + 1 shared expert), total-parameter FLOP formulas misreport actual hardware utilization; active FLOPs per token (~6 * N_active + attention FLOPs) gives true MFU.",
+    "state": "proposed"
+  }
+]

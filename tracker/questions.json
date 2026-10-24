@@ -1,0 +1,30 @@
+[
+  {
+    "id": "Q01",
+    "topic": "Team G5 (Training)",
+    "question": "What are the exact small config dimensions (batch_size, seq_len, d_model, n_layers, n_experts) for the 27 Oct harness handoff so G6 can pre-configure perfkit/bench.py?",
+    "answer": "",
+    "status": "open"
+  },
+  {
+    "id": "Q02",
+    "topic": "Team G4 (Architecture)",
+    "question": "What is the exact function signature and tensor shape contract for the KE2 encode/decode reference landing on 28 Oct?",
+    "answer": "",
+    "status": "open"
+  },
+  {
+    "id": "Q03",
+    "topic": "Team G8 (Monitoring)",
+    "question": "What JSON/dict key schema does G8 expect from perfkit/timer.py and perfkit/bench.py for logging step timings, tokens/s, and MFU?",
+    "answer": "",
+    "status": "open"
+  },
+  {
+    "id": "Q04",
+    "topic": "Team G6 (Internal)",
+    "question": "Which GPU SKU will we standardize on for the Week 1 baseline_v0.md runs so all 2-run <=5% repeatability checks are measured on identical hardware?",
+    "answer": "",
+    "status": "open"
+  }
+]

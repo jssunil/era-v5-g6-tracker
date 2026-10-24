@@ -1,0 +1,72 @@
+[
+  {
+    "id": "BM01",
+    "date": "2026-10-27",
+    "task": "Full Training Step (Small Config Baseline v0)",
+    "shape": "B=2, S=2048, D=3072, BF16",
+    "ms": 0,
+    "baseline_ms": 0,
+    "spread_pct": "—",
+    "parity": "pending",
+    "mutation_101": "pending",
+    "deterministic": "pending",
+    "gpu": "Pending G5 harness (27 Oct)",
+    "notes": "Target: 2 baseline runs agree within <=5% for each part (results/baseline_v0.md)"
+  },
+  {
+    "id": "BM02",
+    "date": "2026-10-29",
+    "task": "KE2 Encode / Decode (test_ke.py)",
+    "shape": "B=2, S=2048, D=3072",
+    "ms": 0,
+    "baseline_ms": 0,
+    "spread_pct": "—",
+    "parity": "pending",
+    "mutation_101": "pending",
+    "deterministic": "pending",
+    "gpu": "Pending G4 ref (28 Oct)",
+    "notes": "Correctness suite + 1.01x perturbation failure check"
+  },
+  {
+    "id": "BM03",
+    "date": "2026-10-29",
+    "task": "Hybrid Attention: GQA 48Q/4KV + QK-Norm + SWA/Full (test_attention.py)",
+    "shape": "B=2, S=2048, H=48/4, d=64, W=512",
+    "ms": 0,
+    "baseline_ms": 0,
+    "spread_pct": "—",
+    "parity": "pending",
+    "mutation_101": "pending",
+    "deterministic": "pending",
+    "gpu": "Pending",
+    "notes": "Correctness suite + 1.01x perturbation failure check"
+  },
+  {
+    "id": "BM04",
+    "date": "2026-10-29",
+    "task": "Fine-Grained MoE: 384 Routed + 1 Shared, Top-6 SwiGLU (test_moe.py)",
+    "shape": "N=4096, D=3072, E=384+1, k=6, d_ff=512",
+    "ms": 0,
+    "baseline_ms": 0,
+    "spread_pct": "—",
+    "parity": "pending",
+    "mutation_101": "pending",
+    "deterministic": "pending",
+    "gpu": "Pending",
+    "notes": "Uniform + skewed/empty expert loads + 1.01x perturbation failure check"
+  },
+  {
+    "id": "BM05",
+    "date": "2026-10-29",
+    "task": "Reversible Residual Block Reconstruction & Custom Backward (test_reversible.py)",
+    "shape": "B=2, S=2048, D=3072",
+    "ms": 0,
+    "baseline_ms": 0,
+    "spread_pct": "—",
+    "parity": "pending",
+    "mutation_101": "pending",
+    "deterministic": "pending",
+    "gpu": "Pending",
+    "notes": "Bit-deterministic reconstruction + custom backward vs standard autograd"
+  }
+]

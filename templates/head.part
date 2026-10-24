@@ -1,0 +1,75 @@
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: read-only status report — summary strip, then sections in reading order: hard deadlines, week 1 plan, team roster & diagnosis, roadmap (weeks 2-4), timeline, benchmark & parity results, decisions, questions. */
+:root{
+  --bg:#f6f7fa; --panel:#ffffff; --ink:#161d2b; --muted:#5c6577; --line:#dde1ea;
+  --accent:#3b4cb8; --accent-soft:#e7eafa;
+  --ok:#1f7a45; --ok-soft:#e3f3e9; --warn:#a15c00; --warn-soft:#fbefdc;
+  --bad:#b3261e; --bad-soft:#f9e3e1; --info:#3b4cb8; --info-soft:#e7eafa; --idle:#687285; --idle-soft:#edf0f4;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10131c; --panel:#171c28; --ink:#e4e8f1; --muted:#9aa3b6; --line:#283043;
+  --accent:#97a4f2; --accent-soft:#222a4a;
+  --ok:#5cc58a; --ok-soft:#163327; --warn:#e3a54a; --warn-soft:#3a2c14;
+  --bad:#f08178; --bad-soft:#3c1d1b; --info:#97a4f2; --info-soft:#222a4a; --idle:#a0a9ba; --idle-soft:#212838;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10131c; --panel:#171c28; --ink:#e4e8f1; --muted:#9aa3b6; --line:#283043;
+  --accent:#97a4f2; --accent-soft:#222a4a;
+  --ok:#5cc58a; --ok-soft:#163327; --warn:#e3a54a; --warn-soft:#3a2c14;
+  --bad:#f08178; --bad-soft:#3c1d1b; --info:#97a4f2; --info-soft:#222a4a; --idle:#a0a9ba; --idle-soft:#212838;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.55;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:24px 56px;display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:18px}
+h1{font-family:var(--display);font-weight:600;font-size:30px;margin:0;text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin-top:4px;max-width:66ch}
+.stats{display:flex;gap:28px;flex-wrap:wrap}
+.stats b{display:block;font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stats small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+section{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+h2{font-family:var(--display);font-weight:600;font-size:19px;margin:0 0 4px}
+.lead{color:var(--muted);font-size:13px;margin:0 0 14px;max-width:74ch}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+td.date{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.pill{display:inline-block;font:500 11px var(--body);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.s-done{background:var(--ok-soft);color:var(--ok)}
+.s-active{background:var(--info-soft);color:var(--info)}
+.s-planned{background:var(--idle-soft);color:var(--idle)}
+.s-at-risk{background:var(--warn-soft);color:var(--warn)}
+.s-blocked{background:var(--bad-soft);color:var(--bad)}
+.ev{font-size:12px;color:var(--muted);margin-top:3px}
+.ev a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+.ev a:hover{border-bottom-style:solid}
+.links-bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.link-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:500;padding:4px 10px;border-radius:4px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;transition:all .15s ease}
+.link-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.link-chip svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+header .src a{color:var(--accent);text-decoration:none}
+header .src a:hover{text-decoration:underline}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+.empty{padding:18px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:6px}
+.gantt{overflow-x:auto}
+.gantt svg{display:block;min-width:760px}
+.gantt text{font-family:var(--body);font-size:11px;fill:var(--muted)}
+.gantt .lbl{fill:var(--ink);font-size:12px}
+.gantt .grid{stroke:var(--line)}
+.gantt .today{stroke:var(--bad);stroke-width:1.5}
+ul.q{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+ul.q .topic{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:6px}
+footer{color:var(--muted);font-size:12px}
+</style>

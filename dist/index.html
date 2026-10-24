@@ -1,0 +1,229 @@
+<title>ERA V5 Capstone · Team G6 (Performance & Kernels) Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: read-only status report — summary strip, then sections in reading order: hard deadlines, week 1 plan, team roster & diagnosis, roadmap (weeks 2-4), timeline, benchmark & parity results, decisions, questions. */
+:root{
+  --bg:#f6f7fa; --panel:#ffffff; --ink:#161d2b; --muted:#5c6577; --line:#dde1ea;
+  --accent:#3b4cb8; --accent-soft:#e7eafa;
+  --ok:#1f7a45; --ok-soft:#e3f3e9; --warn:#a15c00; --warn-soft:#fbefdc;
+  --bad:#b3261e; --bad-soft:#f9e3e1; --info:#3b4cb8; --info-soft:#e7eafa; --idle:#687285; --idle-soft:#edf0f4;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10131c; --panel:#171c28; --ink:#e4e8f1; --muted:#9aa3b6; --line:#283043;
+  --accent:#97a4f2; --accent-soft:#222a4a;
+  --ok:#5cc58a; --ok-soft:#163327; --warn:#e3a54a; --warn-soft:#3a2c14;
+  --bad:#f08178; --bad-soft:#3c1d1b; --info:#97a4f2; --info-soft:#222a4a; --idle:#a0a9ba; --idle-soft:#212838;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10131c; --panel:#171c28; --ink:#e4e8f1; --muted:#9aa3b6; --line:#283043;
+  --accent:#97a4f2; --accent-soft:#222a4a;
+  --ok:#5cc58a; --ok-soft:#163327; --warn:#e3a54a; --warn-soft:#3a2c14;
+  --bad:#f08178; --bad-soft:#3c1d1b; --info:#97a4f2; --info-soft:#222a4a; --idle:#a0a9ba; --idle-soft:#212838;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.55;margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:16px;padding-block:24px 56px;display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-wrap:wrap;gap:16px 32px;align-items:flex-end;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:18px}
+h1{font-family:var(--display);font-weight:600;font-size:30px;margin:0;text-wrap:balance}
+.sub{color:var(--muted);font-size:13px;margin-top:4px;max-width:66ch}
+.stats{display:flex;gap:28px;flex-wrap:wrap}
+.stats b{display:block;font-family:var(--display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.stats small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+section{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+h2{font-family:var(--display);font-weight:600;font-size:19px;margin:0 0 4px}
+.lead{color:var(--muted);font-size:13px;margin:0 0 14px;max-width:74ch}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.id{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+td.date{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.pill{display:inline-block;font:500 11px var(--body);padding:2px 8px;border-radius:999px;white-space:nowrap}
+.s-done{background:var(--ok-soft);color:var(--ok)}
+.s-active{background:var(--info-soft);color:var(--info)}
+.s-planned{background:var(--idle-soft);color:var(--idle)}
+.s-at-risk{background:var(--warn-soft);color:var(--warn)}
+.s-blocked{background:var(--bad-soft);color:var(--bad)}
+.ev{font-size:12px;color:var(--muted);margin-top:3px}
+.ev a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)}
+.ev a:hover{border-bottom-style:solid}
+.links-bar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.link-chip{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:500;padding:4px 10px;border-radius:4px;border:1px solid var(--line);background:var(--panel);color:var(--ink);text-decoration:none;transition:all .15s ease}
+.link-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.link-chip svg{width:13px;height:13px;fill:currentColor;flex-shrink:0}
+header .src a{color:var(--accent);text-decoration:none}
+header .src a:hover{text-decoration:underline}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+.empty{padding:18px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:6px}
+.gantt{overflow-x:auto}
+.gantt svg{display:block;min-width:760px}
+.gantt text{font-family:var(--body);font-size:11px;fill:var(--muted)}
+.gantt .lbl{fill:var(--ink);font-size:12px}
+.gantt .grid{stroke:var(--line)}
+.gantt .today{stroke:var(--bad);stroke-width:1.5}
+ul.q{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+ul.q .topic{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:6px}
+footer{color:var(--muted);font-size:12px}
+</style>
+
+<style>
+.tag{display:inline-block;font:600 10px var(--body);letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+.tag.hard{color:var(--bad);background:var(--bad-soft)}
+.tag.lane{color:var(--accent);background:var(--accent-soft)}
+.badge{display:inline-block;font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:2px 8px;margin-right:8px}
+.badge.ext{background:var(--accent-soft);color:var(--accent)}
+.src{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+td.ans{color:var(--muted);font-size:13px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1 id="h-title"></h1>
+      <div class="sub" id="h-sub"></div>
+      <div class="src" id="h-src"></div>
+      <div class="links-bar" id="h-links"></div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+  <div id="sections" style="display:flex;flex-direction:column;gap:24px"></div>
+  <footer id="foot"></footer>
+</div>
+
+<script>
+const COMMIT="e066174";
+const GENERATED="2026-10-24 19:29";
+const SNAPSHOT="2026-10-24";
+const REPO_URL="https://github.com/jssunil/era-v5-g6-tracker";
+const LAB_URL="https://github.com/theschoolofai/era-v5-lab";
+const DATA={"members": [{"id": "M01", "name": "Vaibhav Lohar", "handle": "", "role": "Core · Team Lead", "weeks": "Weeks 1–4", "assigned_tasks": "G6-W1-03 (correctness/framework.py & 1.01x mutation harness), Cross-team sync (G4/G5/G8), Gate 1 sign-off", "pack_id": "TBD", "diag_150": "planned", "diag_500": "planned", "evidence": ""}, {"id": "M02", "name": "Sunil Jakkaraju", "handle": "jssunil", "role": "Core · Lead Kernel & Profiling Architect (Rotates: W2->G7 Infra, W3->G12 Quant)", "weeks": "Weeks 1–4", "assigned_tasks": "G6-W1-01 (perfkit/timer.py CUDA Event zero-overhead profiler), G6-W1-02 (perfkit/bench.py <=5% repeatability & Sparse MoE MFU), G6-W1-06 (test_moe.py: 384+1 expert top-6 token permute/SwiGLU parity), G6-W1-07 (test_reversible.py: bit-deterministic reversible autograd reconstruction), W2 Fused Triton MoE/Reversible Kernels", "pack_id": "sci-finepdfs", "diag_150": "active", "diag_500": "planned", "evidence": "https://github.com/jssunil"}, {"id": "M03", "name": "Adinath", "handle": "", "role": "Core · Performance & Kernels", "weeks": "Weeks 1–4", "assigned_tasks": "G6-W1-04 (correctness/test_ke.py — KE2 encode/decode parity with G4 reference)", "pack_id": "TBD", "diag_150": "planned", "diag_500": "planned", "evidence": ""}, {"id": "M04", "name": "Shashank", "handle": "", "role": "Core · Performance & Kernels", "weeks": "Weeks 1–4", "assigned_tasks": "G6-W1-05 (correctness/test_attention.py — Hybrid 3:1 SWA + Full GQA 48Q/4KV & QK-norm parity)", "pack_id": "TBD", "diag_150": "planned", "diag_500": "planned", "evidence": ""}, {"id": "M05", "name": "Shiva", "handle": "", "role": "Core · Performance & Kernels", "weeks": "Weeks 1–4", "assigned_tasks": "G6-W1-08 (results/baseline_v0.md — 2-run <=5% repeatability table on G5 small config)", "pack_id": "TBD", "diag_150": "planned", "diag_500": "planned", "evidence": ""}, {"id": "M06", "name": "Vashishth", "handle": "", "role": "Core · Performance & Kernels", "weeks": "Weeks 1–4", "assigned_tasks": "G6-W1-09 (results/slowest5_v0.md — Top 5 bottlenecks & traces), G6-W1-10 (G8 MFU & metrics handoff)", "pack_id": "TBD", "diag_150": "planned", "diag_500": "planned", "evidence": ""}, {"id": "R2-01", "name": "Ajay Kumar", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R2-02", "name": "Keshava Murali", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R2-03", "name": "Rahul Bhati", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R2-04", "name": "Raj H", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R2-05", "name": "Shekar Ramachandran", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R2-06", "name": "Smita Sasindran", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R2-07", "name": "Yasir Reshi", "handle": "", "role": "Rotation · Week 2 (Profile 1 part of training step)", "weeks": "Week 2 (from 1 Nov)", "assigned_tasks": "G6-W2-ROT: Profile one component of the training step and submit trace + report", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R3-01", "name": "Aj N", "handle": "", "role": "Rotation · Week 3 (Write 1 correctness test for a fast kernel)", "weeks": "Week 3 (from 15 Nov)", "assigned_tasks": "G6-W3-ROT: Write one correctness test for a fast kernel in teams/06-performance/correctness/", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R3-02", "name": "Anirudh Narla", "handle": "", "role": "Rotation · Week 3 (Write 1 correctness test for a fast kernel)", "weeks": "Week 3 (from 15 Nov)", "assigned_tasks": "G6-W3-ROT: Write one correctness test for a fast kernel in teams/06-performance/correctness/", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R3-03", "name": "Balasenthil Sarangapani", "handle": "", "role": "Rotation · Week 3 (Write 1 correctness test for a fast kernel)", "weeks": "Week 3 (from 15 Nov)", "assigned_tasks": "G6-W3-ROT: Write one correctness test for a fast kernel in teams/06-performance/correctness/", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R3-04", "name": "Sandeep Kunkunuru", "handle": "", "role": "Rotation · Week 3 (Write 1 correctness test for a fast kernel)", "weeks": "Week 3 (from 15 Nov)", "assigned_tasks": "G6-W3-ROT: Write one correctness test for a fast kernel in teams/06-performance/correctness/", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R3-05", "name": "Soma Korada", "handle": "", "role": "Rotation · Week 3 (Write 1 correctness test for a fast kernel)", "weeks": "Week 3 (from 15 Nov)", "assigned_tasks": "G6-W3-ROT: Write one correctness test for a fast kernel in teams/06-performance/correctness/", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}, {"id": "R3-06", "name": "Syed Abdul", "handle": "", "role": "Rotation · Week 3 (Write 1 correctness test for a fast kernel)", "weeks": "Week 3 (from 15 Nov)", "assigned_tasks": "G6-W3-ROT: Write one correctness test for a fast kernel in teams/06-performance/correctness/", "pack_id": "—", "diag_150": "done", "diag_500": "done", "evidence": ""}], "milestones": [{"id": "D01", "code": "DIAG-150", "title": "3-Day Rule Gate: First 150 labelled rows in labels.csv + 90% Week 1 G6 task progress", "lane": "Data Diagnosis", "owner": "All Core Members (Individual PRs)", "start": "2026-10-24", "due": "2026-10-27", "gate": "PR to diagnosis/submissions/<pack_id>/<github-handle>/labels.csv with >=150 valid rows; pr-guard green; 90% proof on assigned Week 1 G6 module.", "status": "active", "hard": true, "evidence": ""}, {"id": "D02", "code": "DIAG-500", "title": "Week 1 Data Diagnosis Gate: All 500 rows in labels.csv + medicine.md with harm tests", "lane": "Data Diagnosis", "owner": "All Core Members (Individual PRs)", "start": "2026-10-24", "due": "2026-10-31", "gate": "All 500 rows labelled in labels.csv + medicine.md (top 3 diseases, regex/script fixes, before/after examples, harm test <=1% gold drop).", "status": "planned", "hard": true, "evidence": ""}, {"id": "W1-01", "code": "G6-W1-01", "title": "Zero-Overhead CUDA Event Step Profiler (teams/06-performance/perfkit/timer.py)", "lane": "Week 1", "owner": "Sunil Jakkaraju (@jssunil)", "start": "2026-10-24", "due": "2026-10-27", "gate": "Deferred-sync CUDA Event timer recording ke_encode, attention, moe, reversible_fwd, loss, backward, optimizer, comms; zero-overhead no-op toggle verified by unit test.", "status": "active", "hard": false, "evidence": ""}, {"id": "W1-02", "code": "G6-W1-02", "title": "Repeatability Benchmark Harness & Sparse MoE MFU Engine (teams/06-performance/perfkit/bench.py)", "lane": "Week 1", "owner": "Sunil Jakkaraju (@jssunil)", "start": "2026-10-24", "due": "2026-10-28", "gate": "Warmup + timed steps, p50/p90/mean/std breakdown, tokens/s, Sparse MoE active-FLOP MFU, peak VRAM, and automated check that two baseline runs agree within <=5% for every part.", "status": "active", "hard": false, "evidence": ""}, {"id": "W1-03", "code": "G6-W1-03", "title": "Correctness & 1.01x Mutation Test Framework (teams/06-performance/correctness/framework.py)", "lane": "Week 1", "owner": "Vaibhav Lohar (Lead) & Sunil Jakkaraju (@jssunil)", "start": "2026-10-24", "due": "2026-10-27", "gate": "Forward parity, backward input/weight grad parity, bit-deterministic rerun check, and 1.01x fast-output mutation negative test.", "status": "active", "hard": false, "evidence": ""}, {"id": "W1-04", "code": "G6-W1-04", "title": "KE2 Encode/Decode Correctness Suite (teams/06-performance/correctness/test_ke.py)", "lane": "Week 1", "owner": "Adinath", "start": "2026-10-25", "due": "2026-10-29", "gate": "pytest passes on KE2 encode/decode reference vs fast implementation (integrating G4 reference on 28 Oct) and fails when fast output is multiplied by 1.01.", "status": "planned", "hard": false, "evidence": ""}, {"id": "W1-05", "code": "G6-W1-05", "title": "Hybrid SWA + Full GQA Correctness Suite (teams/06-performance/correctness/test_attention.py)", "lane": "Week 1", "owner": "Shashank", "start": "2026-10-25", "due": "2026-10-29", "gate": "pytest passes on GQA (48Q/4KV, head_dim=64, QK-norm, 3:1 SWA window=512 + Full Attention) forward/backward parity and fails on 1.01x perturbation.", "status": "planned", "hard": false, "evidence": ""}, {"id": "W1-06", "code": "G6-W1-06", "title": "Fine-Grained 384+1 MoE Token Permute & SwiGLU Correctness Suite (teams/06-performance/correctness/test_moe.py)", "lane": "Week 1", "owner": "Sunil Jakkaraju (@jssunil)", "start": "2026-10-24", "due": "2026-10-28", "gate": "pytest passes on SwiGLU MoE (384 routed + 1 shared expert, top-6 routing, token permutation, uniform + skewed/empty expert loads) forward/backward grad parity and fails on 1.01x perturbation.", "status": "active", "hard": false, "evidence": ""}, {"id": "W1-07", "code": "G6-W1-07", "title": "Reversible Residual Block Bit-Deterministic Reconstruction & Custom Autograd Suite (teams/06-performance/correctness/test_reversible.py)", "lane": "Week 1", "owner": "Sunil Jakkaraju (@jssunil)", "start": "2026-10-25", "due": "2026-10-29", "gate": "pytest passes on exact reversible state reconstruction (X1, X2), custom autograd backward gradient parity vs standard autograd, bit-determinism, and fails on 1.01x perturbation.", "status": "active", "hard": false, "evidence": ""}, {"id": "W1-08", "code": "G6-W1-08", "title": "First Baseline Timing Report (teams/06-performance/results/baseline_v0.md)", "lane": "Week 1", "owner": "Shiva & Sunil Jakkaraju (@jssunil)", "start": "2026-10-27", "due": "2026-10-30", "gate": "Committed baseline_v0.md with GPU name, git commit SHA, per-part ms breakdown on G5 small config, and 2 runs agreeing within <=5% for every part.", "status": "planned", "hard": false, "evidence": ""}, {"id": "W1-09", "code": "G6-W1-09", "title": "Top 5 Bottlenecks, Profiler Traces & Week 2 Kernel Designs (teams/06-performance/results/slowest5_v0.md)", "lane": "Week 1", "owner": "Vashishth & Sunil Jakkaraju (@jssunil)", "start": "2026-10-28", "due": "2026-10-30", "gate": "Committed slowest5_v0.md listing the 5 slowest parts of the training step, each with a torch.profiler trace summary and 1 concrete Week 2 Triton/CUDA optimization proposal.", "status": "planned", "hard": false, "evidence": ""}, {"id": "W1-10", "code": "G6-W1-10", "title": "System Metrics & MFU Handoff to G8 + Gate 1 Verification", "lane": "Week 1", "owner": "Vaibhav Lohar, Vashishth & Team", "start": "2026-10-29", "due": "2026-10-31", "gate": "All 3 Gate 1 checks pass: (1) pytest teams/06-performance/correctness -q == 0 failures, (2) 1.01x broken function fails, (3) 2 baseline runs agree <=5%. Metrics handed off to G8.", "status": "planned", "hard": true, "evidence": ""}, {"id": "X01", "code": "DEP-G5", "title": "Cross-Team Dependency: Receive Harness & Small Configs from Team G5 (Training)", "lane": "Cross-Team", "owner": "Team G5 -> Team G6", "start": "2026-10-27", "due": "2026-10-27", "gate": "G5 delivers training harness and small configs for G6 baseline timing.", "status": "planned", "hard": false, "evidence": ""}, {"id": "X02", "code": "DEP-G4", "title": "Cross-Team Dependency: Receive KE2 Decode Reference from Team G4 (Architecture)", "lane": "Cross-Team", "owner": "Team G4 -> Team G6", "start": "2026-10-28", "due": "2026-10-28", "gate": "G4 delivers KE2 decode reference implementation for test_ke.py.", "status": "planned", "hard": false, "evidence": ""}, {"id": "W2-01", "code": "G6-W2-01", "title": "Week 2 (Gate 2): Shared H100 Node Baseline, Fused Triton MoE/Reversible Speedups & speed_v1.md", "lane": "Week 2", "owner": "Sunil Jakkaraju (@jssunil), Vaibhav Lohar & Core + W2 Rotation", "start": "2026-11-01", "due": "2026-11-14", "gate": "Node baseline on shared H100; time G5 arms; land 2 kernel speedups (Fused MoE Permute/SwiGLU & Reversible RMSNorm/Residual) with parity tests; publish speed_v1.md.", "status": "planned", "hard": true, "evidence": ""}, {"id": "W3-01", "code": "G6-W3-01", "title": "Week 3 (Gate 3): Dry Run 1 Full-Width Profile, MoE Dispatch/All-to-All & Fused Kernels", "lane": "Week 3", "owner": "Sunil Jakkaraju (@jssunil), Vaibhav Lohar & Core + W3 Rotation", "start": "2026-11-15", "due": "2026-11-21", "gate": "Full-width profile of Dry Run 1 (torch.profiler, Nsight); profile MoE dispatch, all-to-all, checkpoint save; test fused kernels against reference.", "status": "planned", "hard": true, "evidence": ""}, {"id": "W4-01", "code": "G6-W4-01", "title": "Kernel Freeze (23 Nov) & Dry Run 2 Speed Comparison", "lane": "Week 4", "owner": "Team G6 Core", "start": "2026-11-22", "due": "2026-11-26", "gate": "All production kernels frozen by 23 Nov; Dry Run 2 speed & MFU verified on 24–26 Nov.", "status": "planned", "hard": true, "evidence": ""}, {"id": "W4-02", "code": "G6-W4-02", "title": "Week 4 (Gate 4): Launch Commit Correctness Check & speed_backlog.md", "lane": "Week 4", "owner": "Team G6 Core", "start": "2026-11-26", "due": "2026-11-28", "gate": "Full correctness suite passes on launch commit; speed check signed off; speed_backlog.md published before main training run starts on 28 Nov.", "status": "planned", "hard": true, "evidence": ""}], "measurements": [{"id": "BM01", "date": "2026-10-27", "task": "Full Training Step (Small Config Baseline v0)", "shape": "B=2, S=2048, D=3072, BF16", "ms": 0, "baseline_ms": 0, "spread_pct": "—", "parity": "pending", "mutation_101": "pending", "deterministic": "pending", "gpu": "Pending G5 harness (27 Oct)", "notes": "Target: 2 baseline runs agree within <=5% for each part (results/baseline_v0.md)"}, {"id": "BM02", "date": "2026-10-29", "task": "KE2 Encode / Decode (test_ke.py)", "shape": "B=2, S=2048, D=3072", "ms": 0, "baseline_ms": 0, "spread_pct": "—", "parity": "pending", "mutation_101": "pending", "deterministic": "pending", "gpu": "Pending G4 ref (28 Oct)", "notes": "Correctness suite + 1.01x perturbation failure check"}, {"id": "BM03", "date": "2026-10-29", "task": "Hybrid Attention: GQA 48Q/4KV + QK-Norm + SWA/Full (test_attention.py)", "shape": "B=2, S=2048, H=48/4, d=64, W=512", "ms": 0, "baseline_ms": 0, "spread_pct": "—", "parity": "pending", "mutation_101": "pending", "deterministic": "pending", "gpu": "Pending", "notes": "Correctness suite + 1.01x perturbation failure check"}, {"id": "BM04", "date": "2026-10-29", "task": "Fine-Grained MoE: 384 Routed + 1 Shared, Top-6 SwiGLU (test_moe.py)", "shape": "N=4096, D=3072, E=384+1, k=6, d_ff=512", "ms": 0, "baseline_ms": 0, "spread_pct": "—", "parity": "pending", "mutation_101": "pending", "deterministic": "pending", "gpu": "Pending", "notes": "Uniform + skewed/empty expert loads + 1.01x perturbation failure check"}, {"id": "BM05", "date": "2026-10-29", "task": "Reversible Residual Block Reconstruction & Custom Backward (test_reversible.py)", "shape": "B=2, S=2048, D=3072", "ms": 0, "baseline_ms": 0, "spread_pct": "—", "parity": "pending", "mutation_101": "pending", "deterministic": "pending", "gpu": "Pending", "notes": "Bit-deterministic reconstruction + custom backward vs standard autograd"}], "decisions": [{"id": "DEC01", "code": "D01", "date": "2026-10-24", "decision": "Use torch.cuda.Event(enable_timing=True) in perfkit/timer.py with synchronization only at step/report boundaries, and a zero-overhead no-op context manager when enabled=False.", "reason": "Avoids per-layer CPU-GPU sync stalls during training while guaranteeing zero overhead when timing is toggled off (required by G6_Instructions.md).", "state": "decided"}, {"id": "DEC02", "code": "D02", "date": "2026-10-24", "decision": "Enforce the 3-part correctness contract in correctness/framework.py: (1) forward & backward grad parity, (2) bit-deterministic rerun equality, and (3) automatic failure when the fast output is multiplied by 1.01.", "reason": "Directly codifies the Week 1 Gate 1 check ('A broken function fails: lead multiplies one fast output by 1.01, and the test fails').", "state": "decided"}, {"id": "DEC03", "code": "D03", "date": "2026-10-24", "decision": "Standardize baseline repeatability in perfkit/bench.py using warmup steps, locked clocks/seeds where available, and an automated <=5% run-to-run spread assertion across two consecutive baseline runs.", "reason": "Required by Week 1 Gate 1 check #3 ('Two baseline runs agree within 5% for each part').", "state": "decided"}, {"id": "DEC04", "code": "D04", "date": "2026-10-24", "decision": "Count only non-embedding active parameters (approx 2.68B active of 15B total) + attention FLOPs in the MFU calculation handed off to Team G8.", "reason": "For sparse MoE (top-6 of 384 routed + 1 shared expert), total-parameter FLOP formulas misreport actual hardware utilization; active FLOPs per token (~6 * N_active + attention FLOPs) gives true MFU.", "state": "proposed"}], "questions": [{"id": "Q01", "topic": "Team G5 (Training)", "question": "What are the exact small config dimensions (batch_size, seq_len, d_model, n_layers, n_experts) for the 27 Oct harness handoff so G6 can pre-configure perfkit/bench.py?", "answer": "", "status": "open"}, {"id": "Q02", "topic": "Team G4 (Architecture)", "question": "What is the exact function signature and tensor shape contract for the KE2 encode/decode reference landing on 28 Oct?", "answer": "", "status": "open"}, {"id": "Q03", "topic": "Team G8 (Monitoring)", "question": "What JSON/dict key schema does G8 expect from perfkit/timer.py and perfkit/bench.py for logging step timings, tokens/s, and MFU?", "answer": "", "status": "open"}, {"id": "Q04", "topic": "Team G6 (Internal)", "question": "Which GPU SKU will we standardize on for the Week 1 baseline_v0.md runs so all 2-run <=5% repeatability checks are measured on identical hardware?", "answer": "", "status": "open"}]};
+(function(){
+  const LABEL={planned:"Planned",active:"In progress","at-risk":"At risk",blocked:"Blocked",done:"Done"};
+  const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const parse=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d);};
+  const fmt=s=>s?parse(s).toLocaleDateString("en-GB",{day:"2-digit",month:"short"}):"—";
+  const pill=s=>`<span class="pill s-${esc(s||"planned")}">${esc(LABEL[s]||s||"Planned")}</span>`;
+
+  const linkify=s=>{
+    if(!s)return"";
+    let t=esc(s);
+    t=t.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+    t=t.replace(/(^|[\s(])(https?:\/\/[^\s)<]+)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+    t=t.replace(/\b([0-9a-f]{7,40})\b/g,`<a href="${REPO_URL}/commit/$1" target="_blank" rel="noopener" class="mono">$1</a>`);
+    return t;
+  };
+  const evid=e=>!e?`<div class="ev">Evidence: pending PR / commit</div>`:`<div class="ev">Evidence: ${linkify(e)}</div>`;
+  const ms=DATA.milestones||[], members=DATA.members||[], snap=parse(SNAPSHOT), dd=s=>Math.round((parse(s)-snap)/86400000);
+
+  document.getElementById("h-title").textContent="ERA V5 Capstone · Team G6 (Performance & Kernels) Tracker";
+  document.getElementById("h-sub").innerHTML=`<span class="badge ext">Public Team Tracker</span>Shared milestone, correctness, benchmark, and Data Diagnosis tracker for <b>Team G6: Performance &amp; Kernels</b> (<code>teams/06-performance/</code>). Lead: <b>Vaibhav Lohar</b>. Fork or PR updates to <code>tracker/*.json</code> and run <code>python scripts/build.py</code>.`;
+
+  const commitLink=(COMMIT&&COMMIT!=="no-git"&&!COMMIT.includes("uncommitted"))
+    ?`<a href="${REPO_URL}/commit/${esc(COMMIT)}" target="_blank" rel="noopener" class="mono">${esc(COMMIT)}</a>`
+    :`<span class="mono">${esc(COMMIT)}</span>`;
+  document.getElementById("h-src").innerHTML=`Source: <a href="${REPO_URL}" target="_blank" rel="noopener">era-v5-g6-tracker</a> @ ${commitLink} · generated ${GENERATED} · dates relative to ${fmt(SNAPSHOT)}`;
+
+  const links=[
+    `<a class="link-chip" href="${REPO_URL}" target="_blank" rel="noopener"><svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Tracker Repo</a>`,
+    `<a class="link-chip" href="${REPO_URL}/blob/main/TRACKER.md" target="_blank" rel="noopener">📋 TRACKER.md</a>`,
+    `<a class="link-chip" href="${REPO_URL}/tree/main/tracker" target="_blank" rel="noopener">📊 Edit JSON Data</a>`,
+    `<a class="link-chip" href="${LAB_URL}/tree/main/teams/06-performance" target="_blank" rel="noopener">⚡ era-v5-lab/teams/06-performance</a>`,
+    `<a class="link-chip" href="${LAB_URL}/tree/main/diagnosis" target="_blank" rel="noopener">🩺 Data Diagnosis</a>`
+  ];
+  document.getElementById("h-links").innerHTML=links.join("");
+
+  const w1=ms.filter(m=>m.lane==="Week 1");
+  const w1Done=w1.filter(m=>m.status==="done").length;
+  const coreMembers=members.filter(m=>m.id.startsWith("M"));
+  const diagDone=coreMembers.filter(m=>m.diag_500==="done").length;
+  const nextGate=ms.filter(m=>m.hard&&m.status!=="done"&&dd(m.due)>=0).sort((a,b)=>a.due.localeCompare(b.due))[0];
+
+  document.getElementById("stats").innerHTML=
+    `<div><small>Week 1 G6 Tasks</small><b>${w1Done}/${w1.length}</b></div>`+
+    `<div><small>Core Diagnosis (500)</small><b>${diagDone}/${coreMembers.length}</b></div>`+
+    (nextGate?`<div><small>Next Hard Gate</small><b>${dd(nextGate.due)} d</b><span class="ev">${esc(nextGate.code)} · ${fmt(nextGate.due)}</span></div>`:"")+
+    `<div><small>Gate 1 (Week 1 End)</small><b>${dd("2026-10-31")} d</b><span class="ev">31 Oct 2026</span></div>`;
+
+  const sections=[];
+  const sec=(t,lead,html)=>`<section><h2>${t}</h2>${lead?`<p class="lead">${lead}</p>`:""}${html}</section>`;
+
+  // Hard deadlines banner
+  if(ms.some(m=>m.hard&&m.status!=="done"&&dd(m.due)>=0)){
+    const h=ms.filter(m=>m.hard&&m.status!=="done"&&dd(m.due)>=0).map(m=>`<b>${esc(m.code)}</b>: ${esc(m.title)} (${fmt(m.due)})`).join(" · ");
+    sections.push(`<section style="background:var(--bad-soft);border-color:var(--bad)"><h2 style="color:var(--bad)">Upcoming Hard Gates</h2><p style="margin:0">${h}</p></section>`);
+  }
+
+  // Milestone table helper
+  const head=`<thead><tr><th>ID</th><th>Deliverable, Gate &amp; Evidence</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>`;
+  const row=m=>`<tr>
+    <td class="id">${esc(m.code)}</td>
+    <td>
+      <b>${esc(m.title)}</b>${m.hard?'<span class="tag hard">Hard Gate</span>':""}<span class="tag lane">${esc(m.lane)}</span>
+      <div class="ev">Gate: ${esc(m.gate)}</div>
+      ${evid(m.evidence)}
+    </td>
+    <td style="white-space:nowrap;font-size:12px">${esc(m.owner||"TBD")}</td>
+    <td class="date">${fmt(m.due)}</td>
+    <td>${pill(m.status)}</td>
+  </tr>`;
+  const table=(list,empty)=>list.length?`<div class="tablewrap"><table>${head}<tbody>${list.map(row).join("")}</tbody></table></div>`:`<div class="empty">${empty}</div>`;
+
+  // Section 1: Week 1 G6 + Data Diagnosis + Cross-Team
+  const w1All=ms.filter(m=>m.lane==="Data Diagnosis"||m.lane==="Week 1"||m.lane==="Cross-Team");
+  sections.push(sec("Week 1 Deliverables & Gates (24–31 Oct 2026)","Gate 1 requires: (1) pytest teams/06-performance/correctness -q gives 0 failures, (2) multiplying a fast output by 1.01 fails the test, (3) two baseline runs agree within <=5% for each part, and (4) every member submits 150 diagnosis rows by 27 Oct and 500 rows + medicine.md by 31 Oct.",table(w1All,"No Week 1 tasks.")));
+
+  // Section 2: Team Roster & Individual Data Diagnosis Tracker
+  const memHead=`<thead><tr><th>ID</th><th>Member</th><th>Role &amp; Rotation</th><th>Assigned G6 Tasks</th><th>Diagnosis Pack</th><th>27 Oct (150)</th><th>31 Oct (500+Med)</th></tr></thead>`;
+  const memRow=m=>`<tr>
+    <td class="id">${esc(m.id)}</td>
+    <td><b>${esc(m.name)}</b>${m.handle?` <div class="ev"><a href="https://github.com/${esc(m.handle)}" target="_blank" rel="noopener">@${esc(m.handle)}</a></div>`:""}</td>
+    <td style="font-size:12px">${esc(m.role)}<div class="ev">${esc(m.weeks)}</div></td>
+    <td style="font-size:12px">${esc(m.assigned_tasks)}${m.evidence?`<div class="ev">${linkify(m.evidence)}</div>`:""}</td>
+    <td class="mono" style="font-size:12px">${esc(m.pack_id||"—")}</td>
+    <td>${m.pack_id==="—"?`<span class="ev">Own team</span>`:pill(m.diag_150)}</td>
+    <td>${m.pack_id==="—"?`<span class="ev">Own team</span>`:pill(m.diag_500)}</td>
+  </tr>`;
+  sections.push(sec("Team G6 Roster, Task Ownership & Data Diagnosis Status","Core members (Weeks 1–4) and incoming Week 2 & Week 3 rotation members. Update your GitHub handle, pack_id, and task status in tracker/members.json.",`<div class="tablewrap"><table>${memHead}<tbody>${members.map(memRow).join("")}</tbody></table></div>`));
+
+  // Section 3: Weeks 2–4 Roadmap
+  const w24=ms.filter(m=>m.lane==="Week 2"||m.lane==="Week 3"||m.lane==="Week 4");
+  sections.push(sec("Weeks 2–4 Capstone Roadmap (Gates 2, 3 & 4)","Diwali break is 5–11 Nov (no work). Gate 2: 14 Nov · Gate 3: 21 Nov · Kernel Freeze: 23 Nov · Dry Run 2: 24–26 Nov · Gate 4 & Main Run Launch: 28 Nov.",table(w24,"No Week 2–4 milestones.")));
+
+  // Section 4: Timeline SVG Gantt
+  const t0=parse("2026-10-24"),t1=parse("2026-11-29"),W=1060,L=260,R=16,rowH=24,top=34,H=top+ms.length*rowH+8;
+  const span=(t1-t0)/86400000,x=d=>L+((d-t0)/86400000)/span*(W-L-R);
+  const col={done:"var(--ok)",active:"var(--info)","at-risk":"var(--warn)",blocked:"var(--bad)",planned:"var(--idle)"};
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Timeline of Team G6 milestones">`;
+  for(let d=new Date(t0);d<=t1;d.setDate(d.getDate()+1)){if(d.getDay()===6||d.getDay()===2){const X=x(d);s+=`<line class="grid" x1="${X}" y1="${top-6}" x2="${X}" y2="${H-6}"/><text x="${X+3}" y="${top-12}">${d.toLocaleDateString("en-GB",{day:"2-digit",month:"short"})}</text>`;}}
+  const tx=Math.max(L,Math.min(W-R,x(snap)));s+=`<line class="today" x1="${tx}" y1="${top-20}" x2="${tx}" y2="${H-6}"/>`;
+  [...ms].sort((a,b)=>a.start.localeCompare(b.start)||a.due.localeCompare(b.due)).forEach((m,i)=>{const y=top+i*rowH,x0=x(parse(m.start||m.due)),x1=Math.max(x(parse(m.due))+(W-L-R)/span,x0+6);const t=m.title.length>32?m.title.slice(0,31)+"…":m.title;
+    s+=`<text class="lbl" x="0" y="${y+15}"><tspan style="font-family:var(--mono);fill:var(--muted)">${esc(m.code)}</tspan> ${esc(t)}</text><rect x="${x0}" y="${y+5}" width="${x1-x0}" height="13" rx="3" fill="${col[m.status]||col.planned}"><title>${esc(m.code)} ${esc(m.title)} (${esc(m.owner)}) · ${fmt(m.start)} → ${fmt(m.due)}</title></rect>`;});
+  sections.push(sec("Timeline (24 Oct – 28 Nov 2026)","Vertical grid lines mark Tuesdays (27 Oct 3-Day Rule) and Saturdays (Weekly Gates). The red line marks the snapshot date.",`<div class="gantt">${s}</svg></div>`));
+
+  // Section 5: Benchmark & Parity Results
+  const r=DATA.measurements||[];
+  const yn=v=>v==="pass"?`<span class="pill s-done">Pass</span>`:v==="fail"?`<span class="pill s-blocked">Fail</span>`:`<span class="pill s-planned">Pending</span>`;
+  sections.push(sec("Benchmark, Parity & 1.01× Mutation Test Results","A speedup only counts when Forward/Backward Parity passes, the 1.01× broken-output negative check fails as expected, and 2 baseline runs agree within <=5%.",
+    r.length?`<div class="tablewrap"><table><thead><tr><th>Date</th><th>Component / Kernel</th><th>Shape</th><th>Fast (ms)</th><th>Baseline (ms)</th><th>Speedup</th><th>Run Spread</th><th>Parity</th><th>1.01× Check</th><th>Deterministic</th><th>GPU</th></tr></thead><tbody>`+r.map(m=>{const t=+m.ms,b=+m.baseline_ms;const sp=t>0&&b>0?(b/t).toFixed(2)+"×":"—";return `<tr><td class="date">${fmt(m.date)}</td><td><b>${esc(m.task)}</b>${m.notes?`<div class="ev">${linkify(m.notes)}</div>`:""}</td><td class="mono" style="font-size:12px">${esc(m.shape)}</td><td class="mono">${t>0?esc(m.ms):"—"}</td><td class="mono">${b>0?esc(m.baseline_ms):"—"}</td><td class="mono">${sp}</td><td class="mono">${esc(m.spread_pct||"—")}</td><td>${yn(m.parity)}</td><td>${yn(m.mutation_101)}</td><td>${yn(m.deterministic)}</td><td style="font-size:12px">${esc(m.gpu||"—")}</td></tr>`;}).join("")+`</tbody></table></div>`
+    :`<div class="empty">No benchmark measurements recorded yet.</div>`));
+
+  // Section 6: Decisions
+  const dh=`<thead><tr><th>ID</th><th>Date</th><th>Decision</th><th>Reason</th><th>State</th></tr></thead>`;
+  sections.push(sec("Engineering Decisions","Agreed Team G6 conventions for timing, correctness tolerances, MFU calculation, and kernel design.",DATA.decisions.length?`<div class="tablewrap"><table>${dh}<tbody>`+DATA.decisions.map(d=>`<tr><td class="id">${esc(d.code)}</td><td class="date">${fmt(d.date)}</td><td>${linkify(d.decision)}</td><td style="color:var(--muted)">${linkify(d.reason)}</td><td><span class="pill ${d.state==="decided"?"s-done":"s-planned"}">${d.state==="decided"?"Decided":"Proposed"}</span></td></tr>`).join("")+`</tbody></table></div>`:`<div class="empty">No decisions recorded yet.</div>`));
+
+  // Section 7: Open Questions
+  const qs=DATA.questions||[];
+  sections.push(sec("Cross-Team & Internal Questions","Open questions for G4 (Architecture), G5 (Training), G8 (Monitoring), and Team G6.",qs.length?`<div class="tablewrap"><table><thead><tr><th>ID</th><th>Target</th><th>Question</th><th>Answer / Resolution</th><th>Status</th></tr></thead><tbody>`+qs.map(q=>`<tr><td class="id">${esc(q.id)}</td><td class="id" style="font-family:var(--body);text-transform:uppercase;letter-spacing:.06em;font-size:11px">${esc(q.topic)}</td><td>${linkify(q.question)}</td><td class="ans">${linkify(q.answer||"—")}</td><td>${q.status==="answered"?`<span class="pill s-done">Answered</span>`:`<span class="pill s-planned">Open</span>`}</td></tr>`).join("")+`</tbody></table></div>`:`<div class="empty">No open questions.</div>`));
+
+  document.getElementById("sections").innerHTML=sections.join("");
+  document.getElementById("foot").innerHTML=`Public Team G6 tracker repo: <a href="${REPO_URL}" target="_blank" rel="noopener">era-v5-g6-tracker</a> (<code>tracker/*.json</code> &amp; <code>TRACKER.md</code>). Every update is a PR/commit. Built from commit ${commitLink}. · <a href="${REPO_URL}/blob/main/README.md" target="_blank" rel="noopener">README</a> · <a href="${REPO_URL}/blob/main/TRACKER.md" target="_blank" rel="noopener">TRACKER.md</a>`;
+})();
+</script>
