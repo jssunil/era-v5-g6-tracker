@@ -6,6 +6,10 @@
 .badge.ext{background:var(--accent-soft);color:var(--accent)}
 .src{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
 td.ans{color:var(--muted);font-size:13px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:10px}
+.card{border:1px solid var(--line);border-radius:6px;padding:12px 14px;background:var(--bg)}
+.card h3{font-family:var(--display);font-size:15px;margin:0 0 6px;color:var(--ink)}
+.card p{margin:0;font-size:12.5px;color:var(--muted)}
 </style>
 
 <div class="wrap">
@@ -47,8 +51,8 @@ const DATA=__DATA__;
   const evid=e=>!e?`<div class="ev">Evidence: pending PR / commit</div>`:`<div class="ev">Evidence: ${linkify(e)}</div>`;
   const ms=DATA.milestones||[], members=DATA.members||[], snap=parse(SNAPSHOT), dd=s=>Math.round((parse(s)-snap)/86400000);
 
-  document.getElementById("h-title").textContent="ERA V5 Capstone · Team G6 (Performance & Kernels) Tracker";
-  document.getElementById("h-sub").innerHTML=`<span class="badge ext">Public Team Tracker</span>Shared milestone, correctness, benchmark, and Data Diagnosis tracker for <b>Team G6: Performance &amp; Kernels</b> (<code>teams/06-performance/</code>). Lead: <b>Vaibhav Lohar</b>. Fork or PR updates to <code>tracker/*.json</code> and run <code>python scripts/build.py</code>.`;
+  document.getElementById("h-title").textContent="ERA V5 Capstone · Team 06 (Performance & Kernels) Tracker";
+  document.getElementById("h-sub").innerHTML=`<span class="badge ext">Public Team Tracker</span>Shared milestone, study/practice guide, correctness, benchmark, and Data Diagnosis tracker for <b>Team 06: Performance &amp; Kernels</b> (<code>teams/06-performance/</code>) using generic roles (<code>Member01</code>–<code>Member06</code>). Fork or PR updates to <code>tracker/*.json</code> and run <code>python scripts/build.py</code>.`;
 
   const commitLink=(COMMIT&&COMMIT!=="no-git"&&!COMMIT.includes("uncommitted"))
     ?`<a href="${REPO_URL}/commit/${esc(COMMIT)}" target="_blank" rel="noopener" class="mono">${esc(COMMIT)}</a>`
@@ -57,6 +61,7 @@ const DATA=__DATA__;
 
   const links=[
     `<a class="link-chip" href="${REPO_URL}" target="_blank" rel="noopener"><svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Tracker Repo</a>`,
+    `<a class="link-chip" href="${REPO_URL}/blob/main/TEAM_G6_TASK_GUIDE.md" target="_blank" rel="noopener">📖 Full Task Guide (MD)</a>`,
     `<a class="link-chip" href="${REPO_URL}/blob/main/TRACKER.md" target="_blank" rel="noopener">📋 TRACKER.md</a>`,
     `<a class="link-chip" href="${REPO_URL}/tree/main/tracker" target="_blank" rel="noopener">📊 Edit JSON Data</a>`,
     `<a class="link-chip" href="${LAB_URL}/tree/main/teams/06-performance" target="_blank" rel="noopener">⚡ era-v5-lab/teams/06-performance</a>`,
@@ -85,6 +90,40 @@ const DATA=__DATA__;
     sections.push(`<section style="background:var(--bad-soft);border-color:var(--bad)"><h2 style="color:var(--bad)">Upcoming Hard Gates</h2><p style="margin:0">${h}</p></section>`);
   }
 
+  // Parallel vs Sequential overview cards
+  const parallelHtml=`<div class="grid2">
+    <div class="card">
+      <h3>🔥 100% Parallel From Day 1 (24–27 Oct — Zero External Blockers)</h3>
+      <p><b>All Members (Member01–Member06):</b> Label first 150 rows in <code>labels.csv</code> using <code>view_pack.py</code>.<br>
+      <b>Member01:</b> Build <code>correctness/framework.py</code> (fwd/bwd parity, determinism, <code>1.01×</code> mutation check).<br>
+      <b>Member02:</b> Build <code>test_moe.py</code> (384+1 experts, top-6 SwiGLU, uniform &amp; skewed/empty loads).<br>
+      <b>Member03:</b> Scaffold <code>test_ke.py</code> with pluggable KE2 encode/decode contract.<br>
+      <b>Member04:</b> Build <code>test_attention.py</code> (3:1 SWA W=512 + Full GQA 48Q/4KV + QK-Norm).<br>
+      <b>Member05:</b> Build <code>test_reversible.py</code> (reversible state reconstruction &amp; custom autograd).<br>
+      <b>Member06:</b> Build <code>perfkit/timer.py</code> &amp; <code>perfkit/bench.py</code> (zero-overhead CUDA events, &le;5% spread &amp; MFU).</p>
+    </div>
+    <div class="card">
+      <h3>🔗 Sequential Integration After Cross-Team Drops (27–31 Oct)</h3>
+      <p><b>Tue 27 Oct (Team G5 Drop):</b> Receive training harness &amp; small configs from Team G5 &rarr; <b>Member05 &amp; Member03</b> run 2 consecutive baseline passes to produce <code>results/baseline_v0.md</code> (&le;5% spread).<br>
+      <b>Wed 28 Oct (Team G4 Drop):</b> Receive KE2 decode reference from Team G4 &rarr; <b>Member03</b> plugs into <code>test_ke.py</code>.<br>
+      <b>Thu–Fri 29–30 Oct:</b> <b>Member06, Member02 &amp; Member04</b> profile the G5 step and publish <code>results/slowest5_v0.md</code>.<br>
+      <b>Sat 31 Oct (Gate 1):</b> <b>Member01 &amp; Member06</b> hand off MFU/metrics to Team G8 and verify all 3 Gate 1 checks; all members complete 500 rows + <code>medicine.md</code>.</p>
+    </div>
+  </div>`;
+  sections.push(sec("What Runs in Parallel vs. Sequential Dependencies","How Member01–Member06 execute in parallel from Day 1 without blocking on external team handoffs.",parallelHtml));
+
+  // Section 1: Task-by-Task Breakdown (Member01 to Member06) with Study, Practice & Parallelism
+  const memHead=`<thead><tr><th>ID</th><th>Role &amp; Assigned Tasks</th><th>What to Study (References)</th><th>What to Practice &amp; Parallelism</th><th>27 Oct (150)</th><th>31 Oct (500+Med)</th></tr></thead>`;
+  const memRow=m=>`<tr>
+    <td class="id"><b>${esc(m.name)}</b><div class="ev">${esc(m.id)}</div></td>
+    <td style="font-size:12.5px"><b>${esc(m.role)}</b><div class="ev">${esc(m.weeks)}</div><div style="margin-top:4px">${esc(m.assigned_tasks)}</div>${m.evidence?`<div class="ev">${linkify(m.evidence)}</div>`:""}</td>
+    <td style="font-size:12px">${esc(m.study||"—")}</td>
+    <td style="font-size:12px"><div><b>Practice:</b> ${esc(m.practice||"—")}</div><div class="ev" style="margin-top:4px"><b>Parallelism:</b> ${esc(m.parallel||"—")}</div></td>
+    <td>${m.pack_id==="—"?`<span class="ev">Own team</span>`:pill(m.diag_150)}</td>
+    <td>${m.pack_id==="—"?`<span class="ev">Own team</span>`:pill(m.diag_500)}</td>
+  </tr>`;
+  sections.push(sec("Task-by-Task Breakdown (Member01–Member06): Study, Practice & Execution","Equally balanced engineering tracks across all 6 core members plus incoming Week 2 & Week 3 rotation cohorts.",`<div class="tablewrap"><table>${memHead}<tbody>${members.map(memRow).join("")}</tbody></table></div>`));
+
   // Milestone table helper
   const head=`<thead><tr><th>ID</th><th>Deliverable, Gate &amp; Evidence</th><th>Owner</th><th>Due</th><th>Status</th></tr></thead>`;
   const row=m=>`<tr>
@@ -100,34 +139,21 @@ const DATA=__DATA__;
   </tr>`;
   const table=(list,empty)=>list.length?`<div class="tablewrap"><table>${head}<tbody>${list.map(row).join("")}</tbody></table></div>`:`<div class="empty">${empty}</div>`;
 
-  // Section 1: Week 1 G6 + Data Diagnosis + Cross-Team
+  // Section 2: Week 1 G6 + Data Diagnosis + Cross-Team
   const w1All=ms.filter(m=>m.lane==="Data Diagnosis"||m.lane==="Week 1"||m.lane==="Cross-Team");
   sections.push(sec("Week 1 Deliverables & Gates (24–31 Oct 2026)","Gate 1 requires: (1) pytest teams/06-performance/correctness -q gives 0 failures, (2) multiplying a fast output by 1.01 fails the test, (3) two baseline runs agree within <=5% for each part, and (4) every member submits 150 diagnosis rows by 27 Oct and 500 rows + medicine.md by 31 Oct.",table(w1All,"No Week 1 tasks.")));
 
-  // Section 2: Team Roster & Individual Data Diagnosis Tracker
-  const memHead=`<thead><tr><th>ID</th><th>Member</th><th>Role &amp; Rotation</th><th>Assigned G6 Tasks</th><th>Diagnosis Pack</th><th>27 Oct (150)</th><th>31 Oct (500+Med)</th></tr></thead>`;
-  const memRow=m=>`<tr>
-    <td class="id">${esc(m.id)}</td>
-    <td><b>${esc(m.name)}</b>${m.handle?` <div class="ev"><a href="https://github.com/${esc(m.handle)}" target="_blank" rel="noopener">@${esc(m.handle)}</a></div>`:""}</td>
-    <td style="font-size:12px">${esc(m.role)}<div class="ev">${esc(m.weeks)}</div></td>
-    <td style="font-size:12px">${esc(m.assigned_tasks)}${m.evidence?`<div class="ev">${linkify(m.evidence)}</div>`:""}</td>
-    <td class="mono" style="font-size:12px">${esc(m.pack_id||"—")}</td>
-    <td>${m.pack_id==="—"?`<span class="ev">Own team</span>`:pill(m.diag_150)}</td>
-    <td>${m.pack_id==="—"?`<span class="ev">Own team</span>`:pill(m.diag_500)}</td>
-  </tr>`;
-  sections.push(sec("Team G6 Roster, Task Ownership & Data Diagnosis Status","Core members (Weeks 1–4) and incoming Week 2 & Week 3 rotation members. Update your GitHub handle, pack_id, and task status in tracker/members.json.",`<div class="tablewrap"><table>${memHead}<tbody>${members.map(memRow).join("")}</tbody></table></div>`));
+  // Section 3: Prerequisite Reading & Study Plan (Learning lane)
+  const learn=ms.filter(m=>m.lane==="Learning");
+  if(learn.length){
+    sections.push(sec("Prerequisite Reading, Papers & Practice Checklist (By Member)","Targeted ERA V5 session notes, arXiv papers, PMPP chapters, and hands-on practice mapped directly to Member01–Member06.",table(learn,"No learning tasks.")));
+  }
 
-  // Section 3: Weeks 2–4 Roadmap
+  // Section 4: Weeks 2–4 Roadmap
   const w24=ms.filter(m=>m.lane==="Week 2"||m.lane==="Week 3"||m.lane==="Week 4");
   sections.push(sec("Weeks 2–4 Capstone Roadmap (Gates 2, 3 & 4)","Diwali break is 5–11 Nov (no work). Gate 2: 14 Nov · Gate 3: 21 Nov · Kernel Freeze: 23 Nov · Dry Run 2: 24–26 Nov · Gate 4 & Main Run Launch: 28 Nov.",table(w24,"No Week 2–4 milestones.")));
 
-  // Section 3b: Prerequisite Reading & Study Plan (Learning lane)
-  const learn=ms.filter(m=>m.lane==="Learning");
-  if(learn.length){
-    sections.push(sec("Prerequisite Reading, Papers & Study Plan (By Task)","Targeted ERA V5 session notes, arXiv papers, PMPP chapters, and Triton tutorials mapped directly to each member's Week 1–2 deliverable.",table(learn,"No learning tasks.")));
-  }
-
-  // Section 4: Timeline SVG Gantt
+  // Section 5: Timeline SVG Gantt
   const t0=parse("2026-10-24"),t1=parse("2026-11-29"),W=1060,L=260,R=16,rowH=24,top=34,H=top+ms.length*rowH+8;
   const span=(t1-t0)/86400000,x=d=>L+((d-t0)/86400000)/span*(W-L-R);
   const col={done:"var(--ok)",active:"var(--info)","at-risk":"var(--warn)",blocked:"var(--bad)",planned:"var(--idle)"};
@@ -138,22 +164,22 @@ const DATA=__DATA__;
     s+=`<text class="lbl" x="0" y="${y+15}"><tspan style="font-family:var(--mono);fill:var(--muted)">${esc(m.code)}</tspan> ${esc(t)}</text><rect x="${x0}" y="${y+5}" width="${x1-x0}" height="13" rx="3" fill="${col[m.status]||col.planned}"><title>${esc(m.code)} ${esc(m.title)} (${esc(m.owner)}) · ${fmt(m.start)} → ${fmt(m.due)}</title></rect>`;});
   sections.push(sec("Timeline (24 Oct – 28 Nov 2026)","Vertical grid lines mark Tuesdays (27 Oct 3-Day Rule) and Saturdays (Weekly Gates). The red line marks the snapshot date.",`<div class="gantt">${s}</svg></div>`));
 
-  // Section 5: Benchmark & Parity Results
+  // Section 6: Benchmark & Parity Results
   const r=DATA.measurements||[];
   const yn=v=>v==="pass"?`<span class="pill s-done">Pass</span>`:v==="fail"?`<span class="pill s-blocked">Fail</span>`:`<span class="pill s-planned">Pending</span>`;
   sections.push(sec("Benchmark, Parity & 1.01× Mutation Test Results","A speedup only counts when Forward/Backward Parity passes, the 1.01× broken-output negative check fails as expected, and 2 baseline runs agree within <=5%.",
     r.length?`<div class="tablewrap"><table><thead><tr><th>Date</th><th>Component / Kernel</th><th>Shape</th><th>Fast (ms)</th><th>Baseline (ms)</th><th>Speedup</th><th>Run Spread</th><th>Parity</th><th>1.01× Check</th><th>Deterministic</th><th>GPU</th></tr></thead><tbody>`+r.map(m=>{const t=+m.ms,b=+m.baseline_ms;const sp=t>0&&b>0?(b/t).toFixed(2)+"×":"—";return `<tr><td class="date">${fmt(m.date)}</td><td><b>${esc(m.task)}</b>${m.notes?`<div class="ev">${linkify(m.notes)}</div>`:""}</td><td class="mono" style="font-size:12px">${esc(m.shape)}</td><td class="mono">${t>0?esc(m.ms):"—"}</td><td class="mono">${b>0?esc(m.baseline_ms):"—"}</td><td class="mono">${sp}</td><td class="mono">${esc(m.spread_pct||"—")}</td><td>${yn(m.parity)}</td><td>${yn(m.mutation_101)}</td><td>${yn(m.deterministic)}</td><td style="font-size:12px">${esc(m.gpu||"—")}</td></tr>`;}).join("")+`</tbody></table></div>`
     :`<div class="empty">No benchmark measurements recorded yet.</div>`));
 
-  // Section 6: Decisions
+  // Section 7: Decisions
   const dh=`<thead><tr><th>ID</th><th>Date</th><th>Decision</th><th>Reason</th><th>State</th></tr></thead>`;
   sections.push(sec("Engineering Decisions","Agreed Team G6 conventions for timing, correctness tolerances, MFU calculation, and kernel design.",DATA.decisions.length?`<div class="tablewrap"><table>${dh}<tbody>`+DATA.decisions.map(d=>`<tr><td class="id">${esc(d.code)}</td><td class="date">${fmt(d.date)}</td><td>${linkify(d.decision)}</td><td style="color:var(--muted)">${linkify(d.reason)}</td><td><span class="pill ${d.state==="decided"?"s-done":"s-planned"}">${d.state==="decided"?"Decided":"Proposed"}</span></td></tr>`).join("")+`</tbody></table></div>`:`<div class="empty">No decisions recorded yet.</div>`));
 
-  // Section 7: Open Questions
+  // Section 8: Open Questions
   const qs=DATA.questions||[];
   sections.push(sec("Cross-Team & Internal Questions","Open questions for G4 (Architecture), G5 (Training), G8 (Monitoring), and Team G6.",qs.length?`<div class="tablewrap"><table><thead><tr><th>ID</th><th>Target</th><th>Question</th><th>Answer / Resolution</th><th>Status</th></tr></thead><tbody>`+qs.map(q=>`<tr><td class="id">${esc(q.id)}</td><td class="id" style="font-family:var(--body);text-transform:uppercase;letter-spacing:.06em;font-size:11px">${esc(q.topic)}</td><td>${linkify(q.question)}</td><td class="ans">${linkify(q.answer||"—")}</td><td>${q.status==="answered"?`<span class="pill s-done">Answered</span>`:`<span class="pill s-planned">Open</span>`}</td></tr>`).join("")+`</tbody></table></div>`:`<div class="empty">No open questions.</div>`));
 
   document.getElementById("sections").innerHTML=sections.join("");
-  document.getElementById("foot").innerHTML=`Public Team G6 tracker repo: <a href="${REPO_URL}" target="_blank" rel="noopener">era-v5-g6-tracker</a> (<code>tracker/*.json</code> &amp; <code>TRACKER.md</code>). Every update is a PR/commit. Built from commit ${commitLink}. · <a href="${REPO_URL}/blob/main/README.md" target="_blank" rel="noopener">README</a> · <a href="${REPO_URL}/blob/main/TRACKER.md" target="_blank" rel="noopener">TRACKER.md</a>`;
+  document.getElementById("foot").innerHTML=`Public Team 06 tracker repo: <a href="${REPO_URL}" target="_blank" rel="noopener">era-v5-g6-tracker</a> (<code>tracker/*.json</code>, <code>TRACKER.md</code> &amp; <code>TEAM_G6_TASK_GUIDE.md</code>). Every update is a PR/commit. Built from commit ${commitLink}. · <a href="${REPO_URL}/blob/main/README.md" target="_blank" rel="noopener">README</a> · <a href="${REPO_URL}/blob/main/TEAM_G6_TASK_GUIDE.md" target="_blank" rel="noopener">Task Guide</a> · <a href="${REPO_URL}/blob/main/TRACKER.md" target="_blank" rel="noopener">TRACKER.md</a>`;
 })();
 </script>

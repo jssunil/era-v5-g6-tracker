@@ -73,7 +73,7 @@ def commit():
 def render_html(data, sha, snapshot, repo_url):
     head = (ROOT / "templates" / "head.part").read_text(encoding="utf-8")
     body = (ROOT / "templates" / "body.part").read_text(encoding="utf-8")
-    title = "ERA V5 Capstone · Team G6 (Performance & Kernels) Tracker"
+    title = "ERA V5 Capstone · Team 06 (Performance & Kernels) Tracker"
     generated = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
     payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     return (
@@ -101,9 +101,9 @@ def render_markdown(data, sha, snapshot, repo_url):
     diag_500_done = sum(1 for m in core_members if m["diag_500"] == "done")
 
     lines = [
-        "# ⚡ ERA V5 Capstone — Team G6 (Performance & Kernels) Public Tracker",
+        "# ⚡ ERA V5 Capstone — Team 06 (Performance & Kernels) Public Tracker",
         "",
-        f"> **Snapshot Date:** `{snapshot}` · **Commit:** `{sha}` · **Team Folder:** `teams/06-performance/` · **Team Lead:** Vaibhav Lohar",
+        f"> **Snapshot Date:** `{snapshot}` · **Commit:** `{sha}` · **Team Folder:** `teams/06-performance/` · **Full Guide:** [TEAM_G6_TASK_GUIDE.md](./TEAM_G6_TASK_GUIDE.md)",
         ">",
         "> **How to Update:** Edit `tracker/*.json` (or submit a PR) and run `python scripts/build.py` to regenerate both `TRACKER.md` and `dist/index.html`.",
         "",
@@ -122,7 +122,35 @@ def render_markdown(data, sha, snapshot, repo_url):
         "1. **Zero Test Failures:** `pytest teams/06-performance/correctness -q` returns `0` failures.",
         "2. **1.01× Broken Function Check:** Multiplying any fast output by `1.01` causes the correctness suite to **FAIL**.",
         "3. **≤ 5% Baseline Repeatability:** Two consecutive baseline runs agree within `<= 5%` for every part of the training step (`results/baseline_v0.md`).",
-        "4. **Individual Data Diagnosis:** Every member has merged `150` rows by **27 Oct** and all `500` rows + `medicine.md` (with `<= 1%` gold drop harm test) by **31 Oct**.",
+        "4. **Individual Data Diagnosis:** Every member (`Member01`–`Member06`) merges `150` rows by **27 Oct** and all `500` rows + `medicine.md` (with `<= 1%` gold drop harm test) by **31 Oct**.",
+        "",
+        "---",
+        "",
+        "## 👥 Task-by-Task Breakdown (`Member01`–`Member06`): Study, Practice & Parallelism",
+        "",
+        "| Member | Role & Assigned Tasks | What to Study (References) | What to Practice & Parallelism | 27 Oct (150) | 31 Oct (500+Med) |",
+        "| :--- | :--- | :--- | :--- | :--- | :--- |",
+    ]
+
+    for m in core_members:
+        lines.append(
+            f"| **`{m['name']}`**<br><sub>`{m['id']}`</sub> | **{m['role']}**<br><sub>{m['assigned_tasks']}</sub> | <sub>{m.get('study', '—')}</sub> | <sub>**Practice:** {m.get('practice', '—')}<br>**Parallel:** {m.get('parallel', '—')}</sub> | {STATUS_BADGE.get(m['diag_150'], m['diag_150'])} | {STATUS_BADGE.get(m['diag_500'], m['diag_500'])} |"
+        )
+
+    rot_members = [m for m in members if not m["id"].startswith("M")]
+    lines.extend([
+        "",
+        "### Incoming Rotation Cohorts (Week 2 & Week 3)",
+        "",
+        "| ID | Cohort | Window | Rotation Task in Team 06 | Parallelism |",
+        "| :--- | :--- | :--- | :--- | :--- |",
+    ])
+    for m in rot_members:
+        lines.append(
+            f"| `{m['id']}` | **{m['name']}** | {m['weeks']} | {m['assigned_tasks']} | {m.get('parallel', '—')} |"
+        )
+
+    lines.extend([
         "",
         "---",
         "",
@@ -130,47 +158,31 @@ def render_markdown(data, sha, snapshot, repo_url):
         "",
         "| Code | Deliverable & Gate | Owner | Due | Status | Evidence / PR |",
         "| :--- | :--- | :--- | :--- | :--- | :--- |",
-    ]
+    ])
 
     for m in ms:
         if m["lane"] in ("Data Diagnosis", "Week 1", "Cross-Team"):
             hard_tag = " **[HARD GATE]**" if m.get("hard") else ""
             ev = m.get("evidence") or "_Pending PR_"
             lines.append(
-                f"| `{m['code']}` | **{m['title']}**{hard_tag}<br><sub>Gate: {m['gate']}</sub> | {m['owner']} | `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} | {ev} |"
+                f"| `{m['code']}` | **{m['title']}**{hard_tag}<br><sub>Gate: {m['gate']}</sub> | `{m['owner']}` | `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} | {ev} |"
             )
 
-    lines.extend([
-        "",
-        "---",
-        "",
-        "## 👥 Team G6 Roster, Task Ownership & Data Diagnosis Tracker",
-        "",
-        "### Core Team (Weeks 1–4)",
-        "",
-        "| ID | Member | GitHub | Role & Rotations | Assigned G6 Tasks | Diagnosis Pack | 27 Oct (150) | 31 Oct (500+Med) |",
-        "| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |",
-    ])
-
-    for m in core_members:
-        gh = f"[@{m['handle']}](https://github.com/{m['handle']})" if m.get("handle") else "_TBD_"
-        lines.append(
-            f"| `{m['id']}` | **{m['name']}** | {gh} | {m['role']} | {m['assigned_tasks']} | `{m['pack_id']}` | {STATUS_BADGE.get(m['diag_150'], m['diag_150'])} | {STATUS_BADGE.get(m['diag_500'], m['diag_500'])} |"
-        )
-
-    rot_members = [m for m in members if not m["id"].startswith("M")]
-    lines.extend([
-        "",
-        "### Incoming Rotation Members (Week 2 & Week 3)",
-        "",
-        "| ID | Member | Rotation Window | Rotation Task in Team G6 | Status / Link |",
-        "| :--- | :--- | :--- | :--- | :--- |",
-    ])
-    for m in rot_members:
-        ev = m.get("evidence") or "_Scheduled_"
-        lines.append(
-            f"| `{m['id']}` | **{m['name']}** | {m['weeks']} | {m['assigned_tasks']} | {ev} |"
-        )
+    learn_ms = [m for m in ms if m["lane"] == "Learning"]
+    if learn_ms:
+        lines.extend([
+            "",
+            "---",
+            "",
+            "## 📚 Prerequisite Reading, Papers & Practice Checklist (By Member)",
+            "",
+            "| Code | Topic, References & Practice Gate | Owner | Target Date | Status |",
+            "| :--- | :--- | :--- | :--- | :--- |",
+        ])
+        for m in learn_ms:
+            lines.append(
+                f"| `{m['code']}` | **{m['title']}**<br><sub>{m['gate']}</sub> | `{m['owner']}` | `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} |"
+            )
 
     lines.extend([
         "",
@@ -185,23 +197,7 @@ def render_markdown(data, sha, snapshot, repo_url):
         if m["lane"] in ("Week 2", "Week 3", "Week 4"):
             ev = m.get("evidence") or "_Planned_"
             lines.append(
-                f"| `{m['code']}` | **{m['title']}**<br><sub>Gate: {m['gate']}</sub> | {m['owner']} | `{m['start']}` → `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} | {ev} |"
-            )
-
-    learn_ms = [m for m in ms if m["lane"] == "Learning"]
-    if learn_ms:
-        lines.extend([
-            "",
-            "---",
-            "",
-            "## 📚 Prerequisite Reading, Papers & Study Plan (Mapped to Tasks)",
-            "",
-            "| Code | Topic & Required Reading / Papers | Owner | Target Date | Status |",
-            "| :--- | :--- | :--- | :--- | :--- |",
-        ])
-        for m in learn_ms:
-            lines.append(
-                f"| `{m['code']}` | **{m['title']}**<br><sub>{m['gate']}</sub> | {m['owner']} | `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} |"
+                f"| `{m['code']}` | **{m['title']}**<br><sub>Gate: {m['gate']}</sub> | `{m['owner']}` | `{m['start']}` → `{m['due']}` | {STATUS_BADGE.get(m['status'], m['status'])} | {ev} |"
             )
 
     lines.extend([
@@ -212,28 +208,28 @@ def render_markdown(data, sha, snapshot, repo_url):
         "",
         "```mermaid",
         "gantt",
-        "    title Team G6 (Performance & Kernels) — Weeks 1 to 4 Schedule",
+        "    title Team 06 (Performance & Kernels) — Weeks 1 to 4 Schedule",
         "    dateFormat  YYYY-MM-DD",
         "    axisFormat  %d %b",
         "    section Data Diagnosis",
         "    DIAG-150 (150 Rows + 90% W1 Task) :active, d01, 2026-10-24, 2026-10-27",
         "    DIAG-500 (500 Rows + medicine.md) :d02, 2026-10-24, 2026-10-31",
         "    section Week 1 (Gate 1)",
-        "    G6-W1-01 perfkit/timer.py (Vashishth) :w101, 2026-10-24, 2026-10-27",
-        "    G6-W1-02 perfkit/bench.py (Vashishth) :w102, 2026-10-24, 2026-10-28",
-        "    G6-W1-03 framework.py (Vaibhav)       :active, w103, 2026-10-24, 2026-10-27",
-        "    G6-W1-06 test_moe.py 384+1 (Sunil)    :active, w106, 2026-10-24, 2026-10-28",
-        "    G6-W1-07 test_reversible.py (Shiva)   :w107, 2026-10-25, 2026-10-29",
-        "    G6-W1-04 test_ke.py (Adinath)         :w104, 2026-10-25, 2026-10-29",
-        "    G6-W1-05 test_attention.py (Shashank) :w105, 2026-10-25, 2026-10-29",
-        "    G6-W1-08 baseline_v0.md (Shiva/Adinath):w108, 2026-10-27, 2026-10-30",
-        "    G6-W1-09 slowest5_v0.md (Team)        :w109, 2026-10-28, 2026-10-30",
-        "    G6-W1-10 G8 Handoff & Gate 1          :crit, w110, 2026-10-29, 2026-10-31",
+        "    G6-W1-01 perfkit/timer.py (Member06)        :w101, 2026-10-24, 2026-10-27",
+        "    G6-W1-02 perfkit/bench.py (Member06)        :w102, 2026-10-24, 2026-10-28",
+        "    G6-W1-03 framework.py (Member01)            :active, w103, 2026-10-24, 2026-10-27",
+        "    G6-W1-06 test_moe.py 384+1 (Member02)       :active, w106, 2026-10-24, 2026-10-28",
+        "    G6-W1-07 test_reversible.py (Member05)      :w107, 2026-10-25, 2026-10-29",
+        "    G6-W1-04 test_ke.py (Member03)              :w104, 2026-10-25, 2026-10-29",
+        "    G6-W1-05 test_attention.py (Member04)       :w105, 2026-10-25, 2026-10-29",
+        "    G6-W1-08 baseline_v0.md (Member05/Member03) :w108, 2026-10-27, 2026-10-30",
+        "    G6-W1-09 slowest5_v0.md (Member06/02/04)    :w109, 2026-10-28, 2026-10-30",
+        "    G6-W1-10 G8 Handoff & Gate 1 (Member01/06)  :crit, w110, 2026-10-29, 2026-10-31",
         "    section Weeks 2-4",
-        "    G6-W2-01 H100 Baseline & 2 Speedups:w201, 2026-11-01, 2026-11-14",
-        "    G6-W3-01 Dry Run 1 Full Profile   :w301, 2026-11-15, 2026-11-21",
-        "    G6-W4-01 Kernel Freeze & Dry Run 2:crit, w401, 2026-11-22, 2026-11-26",
-        "    G6-W4-02 Launch Check (Gate 4)    :crit, w402, 2026-11-26, 2026-11-28",
+        "    G6-W2-01 H100 Baseline & 2 Speedups         :w201, 2026-11-01, 2026-11-14",
+        "    G6-W3-01 Dry Run 1 Full Profile             :w301, 2026-11-15, 2026-11-21",
+        "    G6-W4-01 Kernel Freeze & Dry Run 2          :crit, w401, 2026-11-22, 2026-11-26",
+        "    G6-W4-02 Launch Check (Gate 4)              :crit, w402, 2026-11-26, 2026-11-28",
         "```",
         "",
         "---",
